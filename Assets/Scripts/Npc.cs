@@ -7,19 +7,21 @@ public class Npc : MonoBehaviour
     [SerializeField]
     private int hitpoints = 30;
     [SerializeField]
+    private HpBar hpBar;
+    [SerializeField]
     private int pointsWorth = 25;
     [SerializeField] 
     private GameObject[] drops; //Made for later.
+
+    private AudioSource source;
+    private MyGameManager gm;
+    private int currentHealth;
 
     //Audio
     [SerializeField]
     private AudioClip hitSound;
     [SerializeField]
     private float vol = 0.3f;
-
-    private AudioSource source;
-    private MyGameManager gm;
-    private int currentHealth;
 
     private void CheckIfDead()
     {
@@ -34,13 +36,15 @@ public class Npc : MonoBehaviour
             this.gameObject.transform.position = new Vector3(0, 0, 0);
             currentHealth = hitpoints;
             Debug.Log(gameObject.transform.name + " died!");
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
+            Destroy(this.gameObject);
         }
     }
 
     public void ApplyDamage(int amount)
     {
         currentHealth -= amount;
+        hpBar.SetValue(currentHealth);
         source.PlayOneShot(hitSound, vol);
         Debug.Log(gameObject.transform.name + " received " + amount + " damage!");
         CheckIfDead();
@@ -56,6 +60,11 @@ public class Npc : MonoBehaviour
         source = GetComponent<AudioSource>();
         gm = GameObject.FindGameObjectWithTag("Manager").GetComponent<MyGameManager>();
         currentHealth = hitpoints;
+    }
+
+    private void Start()
+    {
+        hpBar.SetMaxValue(hitpoints);
     }
 
 }
