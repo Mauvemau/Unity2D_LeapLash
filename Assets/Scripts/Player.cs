@@ -7,43 +7,45 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     [SerializeField]
-    private float speed;
+    private float speed = 10f;
     [SerializeField]
-    private float forceDelay;
+    private float boostSpeed;
+    [SerializeField]
+    private float forceDelay = 0.1f;
+    [SerializeField]
+    private float boostCooldown;
 
-    private float forceTime;
+    private float forceTime = 0;
+    private float boostTimer = 0;
 
     private Vector3 vectorDirector;
     private Vector3 targetPosition;
 
-    private void Movement()
+    private void Movement(float impulse)
     {
         targetPosition = Input.mousePosition;
         targetPosition = Camera.main.ScreenToWorldPoint(targetPosition) - transform.position;
         targetPosition.z = 0;
 
-        rb.AddForce(targetPosition * speed);
+        rb.AddForce(targetPosition * impulse);
     }
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        if (speed <= 0)
-        {
-            speed = 10f;
-        }
-        if(forceDelay <= 0)
-        {
-            forceDelay = 0.1f;
-        }
     }
     void Update()
     {
         forceTime -= Time.deltaTime;
+        boostTimer -= Time.deltaTime;
         if (Input.GetButton("Fire1") && forceTime <= 0)
         {
-            Movement();
-            forceTime = 0;
-            forceTime += forceDelay;
+            Movement(speed);
+            forceTime = forceDelay;
+        }
+        if (Input.GetButtonDown("Fire2") && boostTimer <= 0)
+        {
+            Movement(boostSpeed);
+            boostTimer = boostCooldown;
         }
     }
 }

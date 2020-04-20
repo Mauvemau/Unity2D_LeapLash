@@ -19,14 +19,26 @@ public class EnemySpawner : MonoBehaviour
 
     private float spawnTimer = 0;
 
-    public void StartSpawning()
+    public void CleanupDeadEnemies()
     {
-        spawn = true;
+        for (int i = 0; i < spawned.Count; i++)
+        {
+            if (!spawned[i])
+            {
+                spawned.Remove(spawned[i]);
+                Debug.Log("Cleaned up");
+            }
+        }
     }
 
-    public void StopSpawning()
+    public void SetSpawning(bool opt)
     {
-        spawn = false;
+        spawn = opt;
+    }
+
+    public void SetSpawnRate(float amount)
+    {
+        spawnRate = amount;
     }
 
     public void SetMaxSpawns(int amount)
@@ -62,6 +74,7 @@ public class EnemySpawner : MonoBehaviour
 
                 spawnTimer = spawnRate;
             }
-        }   
+            CleanupDeadEnemies();
+        }
     }
 }
