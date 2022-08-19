@@ -1,6 +1,6 @@
 # LeapLash
 
-A little game i made for the Ludum Dare Game Jam (46) using Unity Engine.
+A little game I made for the Ludum Dare Game Jam (46) using Unity Engine.
 
 https://ldjam.com/events/ludum-dare/46/leaplash
 
